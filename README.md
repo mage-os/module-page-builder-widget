@@ -141,7 +141,7 @@ $productImagePreview = $block->getData('viewModel');
 
 1. Install it into your Mage-OS/Magento 2 project with composer:
     ```
-    composer require mage-os/module-pagebuilder-widget
+    composer require mage-os/module-page-builder-widget
     ```
 
 2. Enable module
