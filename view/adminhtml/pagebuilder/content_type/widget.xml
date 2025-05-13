@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+    <type name="widget"
+          label="CMS Widget"
+          component="Magento_PageBuilder/js/content-type"
+          preview_component="MageOS_PageBuilderWidget/js/content-type/widget/preview"
+          form="pagebuilder_widget_form"
+          menu_section="add_content"
+          icon="icon-pagebuilder-block"
+          sortOrder="1"
+          translate="label">
+        <children default_policy="deny"/>
+        <appearances>
+            <appearance default="true"
+                        name="default"
+                        preview_template="MageOS_PageBuilderWidget/content-type/widget/default/preview"
+                        master_template="MageOS_PageBuilderWidget/content-type/widget/default/master"
+                        reader="Magento_PageBuilder/js/master-format/read/configurable">
+                <elements>
+                    <element name="main">
+                        <style name="text_align" source="text_align"/>
+                        <style name="border" source="border_style" converter="Magento_PageBuilder/js/converter/style/border-style"/>
+                        <style name="border_color" source="border_color"/>
+                        <style name="border_width" source="border_width" converter="Magento_PageBuilder/js/converter/style/border-width"/>
+                        <style name="border_radius" source="border_radius" converter="Magento_PageBuilder/js/converter/style/remove-px"/>
+                        <style name="display" source="display" converter="Magento_PageBuilder/js/converter/style/display" preview_converter="Magento_PageBuilder/js/converter/style/preview/display"/>
+                        <style name="margins" storage_key="margins_and_padding" reader="Magento_PageBuilder/js/property/margins" converter="Magento_PageBuilder/js/converter/style/margins"/>
+                        <style name="padding" storage_key="margins_and_padding" reader="Magento_PageBuilder/js/property/paddings" converter="Magento_PageBuilder/js/converter/style/paddings"/>
+                        <attribute name="name" source="data-content-type"/>
+                        <attribute name="appearance" source="data-appearance"/>
+                        <html name="content" converter="Magento_PageBuilder/js/converter/html/decode"/>
+                        <attribute name="content_settings" source="content_settings"/>
+                        <css name="css_classes"/>
+                    </element>
+                </elements>
+            </appearance>
+        </appearances>
+        <additional_data>
+            <item name="chooserConfig" xsi:type="array">
+                <item name="dataUrl" xsi:type="object">MageOS\PageBuilderWidget\Model\Config\ContentType\AdditionalData\Provider\WidgetDataUrl</item>
+                <item name="formUrl" xsi:type="object">MageOS\PageBuilderWidget\Model\Config\ContentType\AdditionalData\Provider\WidgetFormUrl</item>
+                <item name="saveFormUrl" xsi:type="object">MageOS\PageBuilderWidget\Model\Config\ContentType\AdditionalData\Provider\WidgetSaveFormUrl</item>
+            </item>
+        </additional_data>
+    </type>
+</config>

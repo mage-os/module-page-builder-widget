@@ -1,0 +1,34 @@
+<div data-bind="attr: { id: 'widgetFormContainer' + uid }">
+    <div class="admin__field-design-options" afterRender="renderWidgetBuilder">
+        <input type="text" ko-value="value" attr="id: uid, name: inputName"/>
+
+        <div class="admin__field field field-select_widget_type  with-addon required _required">
+            <div class="admin__field-control control">
+                <div class="admin__field">
+                    <select name="widget_type"
+                            title="Widget Type"
+                            class="required-entry _required select admin__control-select valid"
+                            data-bind="
+                            value: selectedWidgetCode,
+                            attr: { id: 'selectWidgetType' + uid }"
+                            aria-invalid="false">
+                        <!-- ko foreach: { data: chooserOptions, as: 'option' } -->
+                            <option data-bind="value: option.code, attr: {selected: option.selected}">
+                                <!-- ko text: option.name --><!-- /ko -->
+                            </option>
+                        <!-- /ko -->
+                    </select>
+                    <p class="nm">
+                        <small data-bind="text: selectedWidgetDescription"></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="admin__field" data-bind="html: widgetHtmlForm, attr: { id: 'widgetForm' + uid }, visible: saveIsAvailable"></form>
+    <button
+        class="action- scalable save primary ui-button ui-corner-all ui-widget"
+        data-bind="click: updateValue, visible: saveIsAvailable">
+        <span data-bind="i18n: 'Save Widget Configuration'"></span>
+    </button>
+</div>

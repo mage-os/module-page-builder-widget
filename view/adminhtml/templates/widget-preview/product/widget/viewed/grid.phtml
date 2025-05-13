@@ -1,0 +1,14 @@
+<?php
+// phpcs:disable Magento2.Security.LanguageConstruct.DirectOutput
+// phpcs:disable Magento2.PHP.ShortEchoSyntax.ShortEchoTag
+/** @var $block \Magento\Ui\Block\Wrapper */
+?>
+<?= $block->getChildHtml("previewAssets"); ?>
+<?php /* @noEscape */ echo $block->renderApp([
+    'widget_columns' => [
+        'displayMode' => 'grid'
+    ],
+    'image' => [
+        'imageCode' => 'product_listing_thumbnail_preview'
+    ]
+]);

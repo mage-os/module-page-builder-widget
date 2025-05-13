@@ -1,0 +1,19 @@
+<?php
+use MageOS\PageBuilderWidget\Block\Adminhtml\Widget\PreviewAssets;
+/** @var PreviewAssets $block */
+?>
+<?php if (!empty($block->getData('css'))): ?>
+<link href="<?= $block->escapeUrl($block->getAssetUrl($block->getData('css'))); ?>" rel="stylesheet" type="text/css" media="all" />
+<?php endif; ?>
+<?php if(!empty($block->getData('js'))): ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "<?= $block->getData('js'); ?>": {}
+    }
+}
+</script>
+<script type="text/javascript">
+    require('mage/apply/main').apply();
+</script>
+<?php endif;?>

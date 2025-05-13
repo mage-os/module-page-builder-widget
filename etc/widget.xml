@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:MageOS_PageBuilderWidget:etc/widget.xsd">
+    <!-- Magento_Cms widgets -->
+    <widget id="cms_page_link">
+        <previewTemplates>
+            <previewTemplate name="widget/link/link_block.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/widget/link/link_block.phtml</previewTemplate>
+            <previewTemplate name="widget/link/link_inline.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/widget/link/link_inline.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <widget id="cms_static_block">
+        <previewTemplates>
+            <previewTemplate name="widget/static_block/default.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/widget/static_block/default.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <!-- Magento_Sales widgets -->
+    <widget id="sales_widget_guestfrom">
+        <previewTemplates>
+            <previewTemplate name="widget/guest/form.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/widget/guest/form.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <!-- Magento_Catalog widgets -->
+    <widget id="catalog_product_link">
+        <previewTemplates>
+            <previewTemplate name="product/widget/link/link_block.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/link/link_block.phtml</previewTemplate>
+            <previewTemplate name="product/widget/link/link_inline.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/link/link_inline.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <widget id="catalog_category_link">
+        <previewTemplates>
+            <previewTemplate name="category/widget/link/link_block.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/category/widget/link/link_block.phtml</previewTemplate>
+            <previewTemplate name="category/widget/link/link_inline.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/category/widget/link/link_inline.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <widget id="new_products">
+        <previewTemplates>
+            <previewTemplate name="product/widget/new/content/new_grid.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/content/new_grid.phtml</previewTemplate>
+            <previewTemplate name="product/widget/new/content/new_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/content/new_list.phtml</previewTemplate>
+            <previewTemplate name="product/widget/new/column/new_default_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/column/new_default_list.phtml</previewTemplate>
+            <previewTemplate name="product/widget/new/column/new_names_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/column/new_names_list.phtml</previewTemplate>
+            <previewTemplate name="product/widget/new/column/new_images_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/column/new_images_list.phtml</previewTemplate>
+        </previewTemplates>
+        <previewCss>MageOS_PageBuilderWidget::css/widget/preview/products_list_and_grid.css</previewCss>
+        <previewBlockArguments>
+            <argument name="viewModel" xsi:type="object">MageOS\PageBuilderWidget\ViewModel\Adminhtml\Widget\Preview\ProductImagePreview</argument>
+        </previewBlockArguments>
+    </widget>
+    <!-- Magento_CatalogWidget widgets -->
+    <widget id="products_list">
+        <previewTemplates>
+            <previewTemplate name="Magento_CatalogWidget::product/widget/content/grid.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/content/grid.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\PageBuilderWidget\Block\Adminhtml\Widget\Preview\ProductsList</previewBlock>
+        <previewCss>MageOS_PageBuilderWidget::css/widget/preview/products_list_and_grid.css</previewCss>
+        <previewBlockArguments>
+            <argument name="viewModel" xsi:type="object">MageOS\PageBuilderWidget\ViewModel\Adminhtml\Widget\Preview\ProductImagePreview</argument>
+        </previewBlockArguments>
+    </widget>
+</widgets>

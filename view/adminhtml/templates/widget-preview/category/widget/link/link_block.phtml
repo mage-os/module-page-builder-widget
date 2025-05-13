@@ -1,0 +1,8 @@
+<?php
+use Magento\Catalog\Block\Category\Widget\Link;
+/** @var Link $block */
+?>
+<?= $block->getChildHtml("previewAssets"); ?>
+<div class="widget block block-category-link">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
+</div>

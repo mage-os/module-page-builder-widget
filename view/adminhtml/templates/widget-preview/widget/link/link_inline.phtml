@@ -1,0 +1,9 @@
+<?php
+/** @var \Magento\Cms\Block\Widget\Page\Link $block */
+?>
+<?= $block->getChildHtml("previewAssets"); ?>
+<span class="widget block block-cms-link-inline">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>>
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    </a>
+</span>

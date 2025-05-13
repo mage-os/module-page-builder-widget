@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Widget\Model\Config\Converter"
+                type="MageOS\PageBuilderWidget\Model\Config\Converter" />
+    <virtualType name="DefaultWYSIWYGValidator">
+        <arguments>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="content_settings" xsi:type="string">content_settings</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

@@ -1,0 +1,107 @@
+/* DESKTOP CANVAS VIEWPORT */
+.pagebuilder-stage-wrapper .widget.block-products-list ol.product-items,
+.pagebuilder-stage-wrapper .widget.block-new-products.grid ol.product-items {
+    display: flex;
+    flex-wrap: wrap;
+}
+.pagebuilder-stage-wrapper ol.product-items {
+    list-style: none;
+}
+.pagebuilder-stage-wrapper ol.product-items .product-item-inner {
+    display: none;
+}
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item .product-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+}
+.pagebuilder-stage-wrapper .widget.block-products-list .product-item,
+.pagebuilder-stage-wrapper .widget.block-new-products.grid .product-item {
+    margin-left: 2%;
+    width: calc((100% - 8%) / 5);
+}
+.pagebuilder-stage-wrapper .widget.block-products-list .product-item:nth-child(5n + 1),
+.pagebuilder-stage-wrapper .widget.block-new-products.grid .product-item:nth-child(5n + 1) {
+    margin-left: 0;
+}
+.pagebuilder-stage-wrapper ol.product-items .product-item-actions .towishlist > span,
+.pagebuilder-stage-wrapper ol.product-items .product-item-actions .tocompare > span {
+    display: none;
+}
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .towishlist,
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .tocompare {
+    color: #666;
+}
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .towishlist:before,
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .tocompare:before {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 16px;
+    color: inherit;
+    font-family: 'luma-icons';
+    margin: -2px 5px 0 0;
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .towishlist:before {
+    content: '\e600';
+}
+.pagebuilder-stage-wrapper ol.product-items.widget-new-grid .product-item-actions .tocompare:before {
+    content: '\e61e';
+}
+/* MOBILE CANVAS VIEWPORT */
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .widget.block-products-list .product-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+}
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .towishlist,
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .tocompare {
+    line-height: 35px;
+    text-align: center;
+    width: 35px;
+    color: #666;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    display: inline-block;
+    text-decoration: none;
+}
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .towishlist:before,
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .tocompare:before {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 16px;
+    color: inherit;
+    font-family: 'luma-icons';
+    margin: -2px 5px 0 0;
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .towishlist:before {
+    content: '\e600';
+}
+.mobile-viewport.pagebuilder-stage-wrapper ol.product-items .product-item-actions .tocompare:before {
+    content: '\e61e';
+}
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-products-list .product-item-inner,
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-new-products.grid .product-item-inner {
+    display: block;
+}
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-products-list .product-item,
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-new-products.grid .product-item {
+    margin-left: 2%;
+    width: calc((100% - 2%) / 2);
+}
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-products-list .product-item:nth-child(2n + 1),
+.mobile-viewport.pagebuilder-stage-wrapper .widget.block-new-products.grid .product-item:nth-child(2n + 1) {
+    margin-left: 0;
+}
