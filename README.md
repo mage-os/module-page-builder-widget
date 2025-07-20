@@ -91,7 +91,7 @@ Remember that mouse actions are not triggered on widgets preview elements so thi
         <previewTemplate name="Magento_CatalogWidget::product/widget/content/grid.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/content/grid.phtml</previewTemplate>
     </previewTemplates>
     ...
-    <previewJs>MageOS_PageBuilderWidget/js/my-widget-preview-js-file</previewCss>
+    <previewJs>MageOS_PageBuilderWidget/js/my-widget-preview-js-file</previewJS>
     ...
 </widget>
 ```
