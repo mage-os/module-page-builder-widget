@@ -23,8 +23,8 @@
             <xs:documentation>Definition of a widget.</xs:documentation>
         </xs:annotation>
         <xs:all>
-            <xs:element name="label" type="translatableType" maxOccurs="1" minOccurs="1" />
-            <xs:element name="description" type="translatableType" maxOccurs="1" minOccurs="1" />
+            <xs:element name="label" type="translatableType" maxOccurs="1" minOccurs="0" />
+            <xs:element name="description" type="translatableType" maxOccurs="1" minOccurs="0" />
             <xs:element name="parameters" type="parametersType" minOccurs="0"/>
             <xs:element name="containers" type="containersType" minOccurs="0"/>
             <xs:element name="previewTemplates" type="templatesType" minOccurs="0"/>
@@ -34,10 +34,10 @@
             <xs:element name="previewBlockArguments" type="argumentsType" minOccurs="0"/>
         </xs:all>
         <xs:attribute name="id" type="xs:ID" use="required" />
-        <xs:attribute name="class" type="xs:string" use="required" />
+        <xs:attribute name="class" type="xs:string" />
         <xs:attribute name="is_email_compatible" type="xs:boolean" />
         <xs:attribute name="placeholder_image" type="xs:string" />
-        <xs:attribute name="ttl" type="xs:int" use="optional" />
+        <xs:attribute name="ttl" type="xs:int" />
     </xs:complexType>
 
     <xs:complexType name="templatesType">

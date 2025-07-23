@@ -9,4 +9,8 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Widget\Model\Config\SchemaLocator">
+        <plugin name="update-module-widget-schema-locator"
+                type="MageOS\PageBuilderWidget\Plugin\Model\Config\SchemaLocator" sortOrder="10"/>
+    </type>
 </config>
