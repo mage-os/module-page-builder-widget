@@ -79,7 +79,7 @@ Be sure to use enough specific css selectors avoiding conflicts with other compo
     ...
 </widget>
 ```
-ATTENTION: Remember to place this php snippet inside your phtml preview for css inclusion:
+ATTENTION: Remember to place this php snippet inside your phtml preview file for css inclusion:
 ```
 <?= $block->getChildHtml("previewAssets"); ?>
 ```
@@ -113,7 +113,7 @@ You can specify this new PHP class in this node and it will be used replacing th
     ...
 </widget>
 ```
-ATTENTION: Remember to place this php snippet inside your phtml preview for css inclusion:
+ATTENTION: Remember to place this php snippet inside your phtml preview file for js inclusion:
 ```
 <?= $block->getChildHtml("previewAssets"); ?>
 ```
