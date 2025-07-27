@@ -79,6 +79,10 @@ Be sure to use enough specific css selectors avoiding conflicts with other compo
     ...
 </widget>
 ```
+ATTENTION: Remember to place this php snippet inside your phtml preview for css inclusion:
+```
+<?= $block->getChildHtml("previewAssets"); ?>
+```
 
 #### previewJs XML node
 
@@ -108,6 +112,10 @@ You can specify this new PHP class in this node and it will be used replacing th
     <previewBlock>MageOS\PageBuilderWidget\Block\Adminhtml\Widget\Preview\ProductsList</previewBlock>
     ...
 </widget>
+```
+ATTENTION: Remember to place this php snippet inside your phtml preview for css inclusion:
+```
+<?= $block->getChildHtml("previewAssets"); ?>
 ```
 
 #### previewBlockArguments XML node
