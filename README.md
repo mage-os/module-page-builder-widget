@@ -154,6 +154,7 @@ $productImagePreview = $block->getData('viewModel');
 
 2. Enable module
     ```
+    bin/magento module:enable MageOS_PageBuilderWidget
     bin/magento setup:upgrade
     ```
 
