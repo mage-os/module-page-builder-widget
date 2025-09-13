@@ -80,9 +80,6 @@
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <validation>
-                    <rule name="validate-no-utf8mb4-characters" xsi:type="boolean">true</rule>
-                </validation>
             </settings>
         </field>
         <field name="content_settings" formElement="hidden">
