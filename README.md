@@ -5,7 +5,7 @@ New page builder component named "CMS Widget".
 ---
 
 
-## Overview
+## 🚀  Features
 
 The **PageBuilder Widget** module allows the user to specify CMS widgets and relative configurations inside a dedicated page builder component named "CMS Widget".
 As for all pagebuilder components this component is draggable and can be placed inside other components.
@@ -15,7 +15,7 @@ As for all pagebuilder components this component is draggable and can be placed 
 If supported, the page builder will show widget content inside stage preview.
 
 
-## How it works
+## 🔌 How it works
 
 ### Widget Preview assignment
 
@@ -145,7 +145,7 @@ $productImagePreview = $block->getData('viewModel');
 ...
 ```
 
-## Installation
+## 🔧 Installation
 
 1. Install it into your Mage-OS/Magento 2 project with composer:
     ```
@@ -158,11 +158,11 @@ $productImagePreview = $block->getData('viewModel');
     bin/magento setup:upgrade
     ```
 
-## Changelog
+## 🤝 Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 
-## License
+## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.

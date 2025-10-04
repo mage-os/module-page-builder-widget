@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+# 1.3.0
+### Fixed
+- Fix minor code syntax issues and dependencies declaration, add control on widget_type parameter passed for widget preview on adminhtml
+
 # 1.2.0
 ### Fixed
 - Fix not useful and broken validation on pagebuilder widget form ui component
