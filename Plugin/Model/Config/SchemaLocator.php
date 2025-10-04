@@ -3,27 +3,30 @@ declare(strict_types=1);
 
 namespace MageOS\PageBuilderWidget\Plugin\Model\Config;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
+use Magento\Framework\Module\Dir\Reader;
+
 class SchemaLocator
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
      *
-     * @var string
+     * @var ?string
      */
-    protected $_schema = null;
+    protected ?string $_schema = null;
 
     /**
      * Path to corresponding XSD file with validation rules for separate config files
      *
-     * @var string
+     * @var ?string
      */
-    protected $_perFileSchema = null;
+    protected ?string $_perFileSchema = null;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param Reader $moduleReader
      */
     public function __construct(
-        \Magento\Framework\Module\Dir\Reader $moduleReader
+        Reader $moduleReader
     ) {
         $etcDir = $moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_ETC_DIR, 'MageOS_PageBuilderWidget');
         $this->_schema = $etcDir . '/widget.xsd';
@@ -33,24 +36,30 @@ class SchemaLocator
     /**
      * Get path to merged config schema
      *
+     * @param SchemaLocatorInterface $subject
+     * @param string|null $result
      * @return string|null
      */
     public function afterGetSchema(
-        \Magento\Framework\Config\SchemaLocatorInterface $subject,
+        SchemaLocatorInterface $subject,
         ?string $result
-    ) {
+    ): ?string
+    {
         return $this->_schema;
     }
 
     /**
      * Get path to per file validation schema
      *
+     * @param SchemaLocatorInterface $subject
+     * @param string|null $result
      * @return string|null
      */
     public function afterGetPerFileSchema(
-        \Magento\Framework\Config\SchemaLocatorInterface $subject,
+        SchemaLocatorInterface $subject,
         ?string $result
-    ) {
+    ): ?string
+    {
         return $this->_perFileSchema;
     }
 }

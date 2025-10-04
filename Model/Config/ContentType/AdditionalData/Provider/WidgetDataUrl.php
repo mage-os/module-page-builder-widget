@@ -22,7 +22,7 @@ class WidgetDataUrl implements ProviderInterface
     /**
      * @inheritdoc
      */
-    public function getData(string $itemName) : array
+    public function getData(string $itemName): array
     {
         return [$itemName => $this->urlBuilder->getUrl('pagebuilderwidget/contenttype_widget/metadata')];
     }

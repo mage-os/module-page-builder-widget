@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace MageOS\PageBuilderWidget\Block\Adminhtml\Widget;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Framework\View\Asset\Repository;
@@ -16,14 +17,19 @@ class PreviewAssets extends Template implements BlockInterface
 
 
     public function __construct(
-        protected \Magento\Framework\View\Asset\Repository $assetRepository,
-        Template\Context $context,
-        array $data = []
+        protected Repository $assetRepository,
+        Template\Context     $context,
+        array                $data = []
     ) {
         parent::__construct($context, $data);
     }
 
-    public function getAssetUrl($asset)
+    /**
+     * @param $asset
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getAssetUrl($asset): string
     {
         return $this->assetRepository->createAsset($asset)->getUrl();
     }

@@ -3,17 +3,21 @@ declare(strict_types=1);
 
 namespace MageOS\PageBuilderWidget\Plugin;
 
+use Magento\Cms\Api\Data\BlockInterface;
+
 class WidgetContentSettingsCleanup
 {
     /**
      * Get path to merged config schema
-     *
+     * @param BlockInterface $subject
+     * @param string|null $result
      * @return string|null
      */
     public function afterGetContent(
-        $subject,
+        BlockInterface $subject,
         ?string $result
-    ) {
+    ): ?string
+    {
         return preg_replace_callback(
             '/<div[^>]*data-content-type="widget"[^>]*>/i',
             function ($matches) {

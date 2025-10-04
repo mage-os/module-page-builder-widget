@@ -10,7 +10,7 @@ New page builder component named "CMS Widget".
 The **PageBuilder Widget** module allows the user to specify CMS widgets and relative configurations inside a dedicated page builder component named "CMS Widget".
 As for all pagebuilder components this component is draggable and can be placed inside other components.
 
-![plot](./README-cms-widget-sidebar.png)
+![plot](./doc/widget-sidebar_screenshot.png)
 
 If supported, the page builder will show widget content inside stage preview.
 

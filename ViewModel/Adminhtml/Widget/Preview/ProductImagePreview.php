@@ -17,7 +17,7 @@ class ProductImagePreview
      * @param Product $product
      * @return string
      */
-    public function getProductImage($product)
+    public function getProductImage(Product $product): string
     {
         return $this->imageHelper->init($product, 'product_listing_thumbnail_preview')->getUrl();
     }

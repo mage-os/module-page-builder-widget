@@ -5,6 +5,8 @@ namespace MageOS\PageBuilderWidget\Controller\Adminhtml\ContentType\Widget;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Magento\Widget\Model\WidgetFactory;
 
 class Metadata extends \Magento\Backend\App\AbstractAction
 {
@@ -14,11 +16,13 @@ class Metadata extends \Magento\Backend\App\AbstractAction
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
+     * @param WidgetFactory $widgetFactory
+     * @param Registry $registry
      * @param Context $context
      */
     public function __construct(
-        protected \Magento\Widget\Model\WidgetFactory $widgetFactory,
-        protected \Magento\Framework\Registry $registry,
+        protected WidgetFactory $widgetFactory,
+        protected Registry $registry,
         Context $context
     ) {
         parent::__construct($context);
@@ -35,7 +39,7 @@ class Metadata extends \Magento\Backend\App\AbstractAction
      *
      * @return array
      */
-    protected function getAvailableWidgets()
+    protected function getAvailableWidgets(): array
     {
         $result = [];
         $allWidgets = $this->widgetFactory->create()->getWidgetsArray();
@@ -59,9 +63,9 @@ class Metadata extends \Magento\Backend\App\AbstractAction
     /**
      * Return array of widgets disabled for selection
      *
-     * @return string[]
+     * @return ?array
      */
-    protected function getSkippedWidgets()
+    protected function getSkippedWidgets(): ?array
     {
         return $this->registry->registry('skip_widgets');
     }

@@ -15,12 +15,12 @@ use Magento\Widget\Block\BlockInterface;
 class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList implements BlockInterface, IdentityInterface
 {
 
-    public function getCacheKeyInfo()
+    public function getCacheKeyInfo(): array
     {
         return [];
     }
 
-    public function getCacheKey()
+    public function getCacheKey(): array
     {
         return [];
     }
@@ -30,7 +30,7 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
      *
      * @return string
      */
-    protected function _loadCache()
+    protected function _loadCache(): string
     {
         $collectAction = function () {
             if ($this->hasData('translate_inline')) {

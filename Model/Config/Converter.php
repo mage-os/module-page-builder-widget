@@ -12,7 +12,7 @@ class Converter extends \Magento\Widget\Model\Config\Converter implements \Magen
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * phpcs:disable Generic.Metrics.NestingLevel
      */
-    public function convert($source)
+    public function convert($source): array
     {
         $widgets = [];
         $xpath = new \DOMXPath($source);

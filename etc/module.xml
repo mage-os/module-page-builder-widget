@@ -2,7 +2,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="MageOS_PageBuilderWidget">
         <sequence>
+            <module name="Magento_Widget"/>
             <module name="Magento_PageBuilder"/>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Ui"/>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_CatalogWidget"/>
+            <module name="Magento_Cms"/>
+            <module name="Magento_Wishlist"/>
         </sequence>
     </module>
 </config>

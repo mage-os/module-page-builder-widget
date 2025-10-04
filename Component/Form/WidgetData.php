@@ -26,7 +26,7 @@ class WidgetData extends \Magento\Ui\Component\Form\Field
      * @return void
      * @throws LocalizedException
      */
-    public function prepare()
+    public function prepare(): void
     {
         $config = $this->getData('config');
         $config['widgetUrl'] = $this->backendUrl->getUrl(

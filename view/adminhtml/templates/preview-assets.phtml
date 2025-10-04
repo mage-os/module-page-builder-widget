@@ -1,19 +1,28 @@
 <?php
 use MageOS\PageBuilderWidget\Block\Adminhtml\Widget\PreviewAssets;
 /** @var PreviewAssets $block */
+
+$blockJs = $block->getData('js');
 ?>
 <?php if (!empty($block->getData('css'))): ?>
 <link href="<?= $block->escapeUrl($block->getAssetUrl($block->getData('css'))); ?>" rel="stylesheet" type="text/css" media="all" />
 <?php endif; ?>
-<?php if(!empty($block->getData('js'))): ?>
-<script type="text/x-magento-init">
-{
-    "*": {
-        "<?= $block->getData('js'); ?>": {}
+<?php $xMagentoInitJsScript = <<<script
+    {
+        "*": {
+            "$blockJs": {}
+        }
     }
-}
-</script>
-<script type="text/javascript">
+script; ?>
+<?php $inlineScript = <<<script
     require('mage/apply/main').apply();
-</script>
-<?php endif;?>
+script; ?>
+<?php if (isset($secureRenderer) && $secureRenderer instanceof \Magento\Framework\View\Helper\SecureHtmlRenderer): ?>
+    <?php if(!empty($block->getData('js'))): ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $xMagentoInitJsScript, false) ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $inlineScript, false) ?>
+    <?php else: ?>
+        <script type="text/x-magento-init"><?= $xMagentoInitJsScript ?></script>
+        <script type="text/javascript"><?= $inlineScript ?></script>
+    <?php endif;?>
+<?php endif; ?>
