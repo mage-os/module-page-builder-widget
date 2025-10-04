@@ -40,6 +40,13 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     public function execute()
     {
         $type = $this->getRequest()->getPost('widget_type');
+        if (!$type
+            || !class_exists($type)
+            || !is_subclass_of($type, \Magento\Framework\View\Element\AbstractBlock::class)
+        ) {
+            return $this->returnEmptyResult();
+        }
+
         $params = $this->getRequest()->getPost('parameters', []);
 
         $widgetDeclaration = $this->widget->getWidgetDeclaration($type, $params, true);
@@ -48,11 +55,22 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
         $widgetConfig = $this->widget->getConfigAsObject($type);
         $widgetTemplate = isset($params["template"]) ? $params["template"] : $widgetConfig["parameters"]["template"]["value"];
 
+        if (
+            !$widgetConfig->getType()
+        ) {
+            return $this->returnEmptyResult();
+        }
+
         try {
             if ($widgetConfig->getData('previewBlockArguments')) {
                 foreach ($widgetConfig->getData('previewBlockArguments') as $key => $argument) {
                     if ($argument["type"] === "object") {
-                        $params[$key] = $this->objectManager->get($argument["value"]);
+                        $allowedObject = $argument['value'];
+                        if (class_exists($allowedObject) || interface_exists($allowedObject)) {
+                            $params[$key] = $this->objectManager->get($argument["value"]);
+                        } else {
+                            $params[$key] = null;
+                        }
                     } else {
                         $params[$key] = $argument["value"];
                     }
@@ -99,6 +117,19 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             'widgetDeclaration' => $widgetDeclaration,
             'widgetPreview' => $widgetPreview,
             'widgetData' => $widgetData
+        ]);
+        return $result;
+    }
+
+    /**
+     * @return Json
+     */
+    private function returnEmptyResult() {
+        $result = $this->jsonFactory->create();
+        $result->setData([
+            'widgetDeclaration' => null,
+            'widgetPreview' => null,
+            'widgetData' => null
         ]);
         return $result;
     }
