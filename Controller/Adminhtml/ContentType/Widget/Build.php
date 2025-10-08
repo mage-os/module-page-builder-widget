@@ -19,6 +19,8 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
 {
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
+    const SCRIPT_REPLACE_REGEX = '#<script\b[^>]*>.*?</script>#is';
+
     /**
      * @param Context $context
      * @param Widget $widget
@@ -57,7 +59,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
         $params = $this->sanitizeWidgetParams($params, $widgetConfig);
 
         $widgetDeclaration = $this->widget->getWidgetDeclaration($type, $params, true);
-        $widgetData = $this->widget->getWidgetDeclaration($type, $params, true);
+        $widgetData = $widgetDeclaration;
         $widgetTemplate = $params["template"] ?? $widgetConfig["parameters"]["template"]["value"];
 
         if (
@@ -149,9 +151,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     public function sanitizeWidgetParams(array $params, DataObject $widgetConfig): array
     {
         $paramsConfig = $widgetConfig->getData('parameters');
-        $paramKeys = array_merge(
-            array_keys($paramsConfig)
-        );
+        $paramKeys = array_keys($paramsConfig);
         foreach ($params as $key => $value) {
             if ($key === "pagebuilder_widget_directive") {
                 continue;
@@ -182,21 +182,21 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
                     }
                     break;
                 case 'text':
-                    $value = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+                    $value = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $value);
                     $params[$key] = $this->escaper->escapeHtml($value);
                     break;
                 default:
                     if (is_array($value)) {
                         foreach ($value as $repeatableItemKey => $repeatableItemData) {
                             foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
-                                $repeatableItemDataValue = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $repeatableItemDataValue);
+                                $repeatableItemDataValue = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $repeatableItemDataValue);
                                 $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
                             }
                             $value[$repeatableItemKey] = $repeatableItemData;
                         }
                         $params[$key] = $value;
                     } else {
-                        $value = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+                        $value = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $value);
                         $params[$key] = $this->escaper->escapeHtml($value);
                     }
                     break;
