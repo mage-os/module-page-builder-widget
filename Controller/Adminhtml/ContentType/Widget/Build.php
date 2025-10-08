@@ -8,10 +8,12 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
 use Magento\Widget\Model\Widget;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Escaper;
 
 class Build extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -23,13 +25,15 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
      * @param JsonFactory $jsonFactory
      * @param LayoutInterface $layout
      * @param ObjectManagerInterface $objectManager
+     * @param Escaper $escaper
      */
     public function __construct(
         protected Context $context,
         protected Widget $widget,
         protected JsonFactory $jsonFactory,
         protected LayoutInterface $layout,
-        protected ObjectManagerInterface $objectManager
+        protected ObjectManagerInterface $objectManager,
+        protected Escaper $escaper
     ) {
         parent::__construct($context);
     }
@@ -42,18 +46,19 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
         $type = $this->getRequest()->getPost('widget_type');
         if (!$type
             || !class_exists($type)
-            || !is_subclass_of($type, \Magento\Framework\View\Element\AbstractBlock::class)
+            || !is_subclass_of($type, \Magento\Widget\Block\BlockInterface::class)
         ) {
             return $this->returnEmptyResult();
         }
 
         $params = $this->getRequest()->getPost('parameters', []);
+        $widgetConfig = $this->widget->getConfigAsObject($type);
+        $params['pagebuilder_widget_directive'] = true;
+        $params = $this->sanitizeWidgetParams($params, $widgetConfig);
 
         $widgetDeclaration = $this->widget->getWidgetDeclaration($type, $params, true);
-        $params['pagebuilder_widget_directive'] = true;
         $widgetData = $this->widget->getWidgetDeclaration($type, $params, true);
-        $widgetConfig = $this->widget->getConfigAsObject($type);
-        $widgetTemplate = isset($params["template"]) ? $params["template"] : $widgetConfig["parameters"]["template"]["value"];
+        $widgetTemplate = $params["template"] ?? $widgetConfig["parameters"]["template"]["value"];
 
         if (
             !$widgetConfig->getType()
@@ -79,6 +84,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             if ($widgetConfig->getData('previewBlock')) {
                 $type = $widgetConfig->getData('previewBlock');
             }
+
             $widgetBlock = $this->layout->createBlock($type, 'widgetPreview', ['data' => $params]);
             if ($widgetConfig->getData('previewTemplates')) {
                 foreach ($widgetConfig->getData('previewTemplates') as $mainTemplate => $previewTemplate) {
@@ -108,7 +114,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             );
             $widgetPreview = $widgetBlock->toHtml();
         } catch (\Exception $e) {
-            $widgetPreview = false;
+            return $this->returnEmptyResult();
         }
 
 
@@ -124,7 +130,8 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     /**
      * @return Json
      */
-    private function returnEmptyResult() {
+    private function returnEmptyResult(): Json
+    {
         $result = $this->jsonFactory->create();
         $result->setData([
             'widgetDeclaration' => null,
@@ -132,5 +139,69 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             'widgetData' => null
         ]);
         return $result;
+    }
+
+    /**
+     * @param array $params
+     * @param DataObject $widgetConfig
+     * @return array
+     */
+    public function sanitizeWidgetParams(array $params, DataObject $widgetConfig): array
+    {
+        $paramsConfig = $widgetConfig->getData('parameters');
+        $paramKeys = array_merge(
+            array_keys($paramsConfig)
+        );
+        foreach ($params as $key => $value) {
+            if ($key === "pagebuilder_widget_directive") {
+                continue;
+            }
+            if (!in_array($key, $paramKeys)) {
+                unset($params[$key]);
+            }
+            $paramsConfigKey = $key;
+            if (!isset($paramsConfig[$key]) && $key === 'conditions') {
+                $paramsConfigKey = 'condition';
+            }
+            switch ($paramsConfig[$paramsConfigKey]->getType()) {
+                case 'select':
+                    $valueFound = false;
+                    foreach ($paramsConfig[$paramsConfigKey]['values'] as $valueKey => $valueData) {
+                        if ($value === $valueData['value']) {
+                            $valueFound = true;
+                            break;
+                        }
+                    }
+                    if (!$valueFound) {
+                        if (isset($paramsConfig[$paramsConfigKey]['source_model'])) {
+                            $paramsConfig[$paramsConfigKey]['values'] = $this->objectManager->get(
+                                $paramsConfig[$paramsConfigKey]['source_model']
+                            )->toOptionArray();
+                        }
+                        $params[$key] = $paramsConfig[$paramsConfigKey]['values'][0]['value'];
+                    }
+                    break;
+                case 'text':
+                    $value = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+                    $params[$key] = $this->escaper->escapeHtml($value);
+                    break;
+                default:
+                    if (is_array($value)) {
+                        foreach ($value as $repeatableItemKey => $repeatableItemData) {
+                            foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
+                                $repeatableItemDataValue = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $repeatableItemDataValue);
+                                $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
+                            }
+                            $value[$repeatableItemKey] = $repeatableItemData;
+                        }
+                        $params[$key] = $value;
+                    } else {
+                        $value = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+                        $params[$key] = $this->escaper->escapeHtml($value);
+                    }
+                    break;
+            }
+        }
+        return $params;
     }
 }

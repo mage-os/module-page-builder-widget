@@ -9,12 +9,12 @@ class WidgetContentSettingsCleanup
 {
     /**
      * Get path to merged config schema
-     * @param BlockInterface $subject
+     * @param $subject
      * @param string|null $result
      * @return string|null
      */
     public function afterGetContent(
-        BlockInterface $subject,
+        $subject,
         ?string $result
     ): ?string
     {
