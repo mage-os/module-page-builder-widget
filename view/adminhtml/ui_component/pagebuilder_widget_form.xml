@@ -67,12 +67,16 @@
     <fieldset name="general" sortOrder="20">
         <settings>
             <label/>
+            <collapsible>false</collapsible>
+            <opened>true</opened>
         </settings>
         <field name="content" sortOrder="70" formElement="textarea"
-               component="MageOS_PageBuilderWidget/js/form/element/widget-builder">
+               component="MageOS_PageBuilderWidget/js/form/element/widget-builder"
+               template="ui/form/components/single/field">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="null" />
+                    <item name="default" xsi:type="null"/>
+                    <item name="elementTmpl" xsi:type="string">MageOS_PageBuilderWidget/form/element/widget-builder</item>
                     <item name="dataUrlConfigPath" xsi:type="string">content_types.widget.additional_data.chooserConfig.dataUrl</item>
                     <item name="formUrlConfigPath" xsi:type="string">content_types.widget.additional_data.chooserConfig.formUrl</item>
                     <item name="saveFormUrlConfigPath" xsi:type="string">content_types.widget.additional_data.chooserConfig.saveFormUrl</item>
@@ -80,6 +84,11 @@
             </argument>
             <settings>
                 <dataType>text</dataType>
+                <label/>
+                <labelVisible>false</labelVisible>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
             </settings>
         </field>
         <field name="content_settings" formElement="hidden">
