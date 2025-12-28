@@ -1,18 +1,30 @@
-.pagebuilder_modal_form_pagebuilder_modal_form_modal_insert_form {
-  .fieldset-wrapper[data-index="general"] {
-    > .admin__fieldset-wrapper-content {
-      > fieldset.admin__fieldset {
-        > .admin__field {
-          > .admin__field-label {
-            display: none;
-          }
+.pagebuilder-widget-form-container {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
 
-          > .admin__field-control {
+    .widget-type-selector {
+        margin-bottom: 20px;
+
+        .admin__field-control {
             width: 100%;
-            padding: 30px;
-          }
         }
-      }
+
+        select {
+            width: 100%;
+        }
     }
-  }
+
+    .widget-form-content {
+        margin-bottom: 20px;
+        width: 100%;
+
+        form {
+            width: 100%;
+        }
+    }
+
+    .widget-save-button {
+        margin-top: 15px;
+    }
 }
