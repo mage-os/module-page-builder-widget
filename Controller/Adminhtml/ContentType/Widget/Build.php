@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Widget\Model\Widget;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Escaper;
 
@@ -35,6 +36,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
         protected JsonFactory $jsonFactory,
         protected LayoutInterface $layout,
         protected ObjectManagerInterface $objectManager,
+        protected ConfigInterface $objectManagerConfig,
         protected Escaper $escaper
     ) {
         parent::__construct($context);
@@ -46,13 +48,9 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     public function execute()
     {
         $type = $this->getRequest()->getPost('widget_type');
-        if (!$type
-            || !class_exists($type)
-            || !is_subclass_of($type, \Magento\Widget\Block\BlockInterface::class)
-        ) {
+        if (!$this->isTypeValid($type)) {
             return $this->returnEmptyResult();
         }
-
         $params = $this->getRequest()->getPost('parameters', []);
         $widgetConfig = $this->widget->getConfigAsObject($type);
         $params['pagebuilder_widget_directive'] = true;
@@ -188,9 +186,11 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
                 default:
                     if (is_array($value)) {
                         foreach ($value as $repeatableItemKey => $repeatableItemData) {
-                            foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
-                                $repeatableItemDataValue = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $repeatableItemDataValue);
-                                $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
+                            if (is_array($repeatableItemData)) {
+                                foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
+                                    $repeatableItemDataValue = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $repeatableItemDataValue);
+                                    $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
+                                }
                             }
                             $value[$repeatableItemKey] = $repeatableItemData;
                         }
@@ -203,5 +203,23 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             }
         }
         return $params;
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    public function isTypeValid(string $type) {
+        if (!$type) {
+            return false;
+        }
+
+        $classToValidate = $type;
+        if (!class_exists($type)) {
+            $classToValidate = $this->objectManagerConfig->getInstanceType($type);
+        }
+
+        return class_exists($classToValidate)
+            && is_subclass_of($classToValidate, \Magento\Widget\Block\BlockInterface::class);
     }
 }

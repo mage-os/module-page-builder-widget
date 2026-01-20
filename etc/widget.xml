@@ -41,10 +41,25 @@
             <previewTemplate name="product/widget/new/column/new_names_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/column/new_names_list.phtml</previewTemplate>
             <previewTemplate name="product/widget/new/column/new_images_list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/new/column/new_images_list.phtml</previewTemplate>
         </previewTemplates>
+        <previewBlock>MageOS\PageBuilderWidget\Block\Adminhtml\Widget\Preview\NewWidget</previewBlock>
         <previewCss>MageOS_PageBuilderWidget::css/widget/preview/products_list_and_grid.css</previewCss>
         <previewBlockArguments>
             <argument name="viewModel" xsi:type="object">MageOS\PageBuilderWidget\ViewModel\Adminhtml\Widget\Preview\ProductImagePreview</argument>
         </previewBlockArguments>
+    </widget>
+    <widget id="catalog_recently_viewed">
+        <previewTemplates>
+            <previewTemplate name="product/widget/viewed/grid.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/viewed/grid.phtml</previewTemplate>
+            <previewTemplate name="product/widget/viewed/list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/viewed/list.phtml</previewTemplate>
+            <previewTemplate name="product/widget/viewed/sidebar.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/viewed/sidebar.phtml</previewTemplate>
+        </previewTemplates>
+    </widget>
+    <widget id="catalog_recently_compared">
+        <previewTemplates>
+            <previewTemplate name="product/widget/compared/grid.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/compared/grid.phtml</previewTemplate>
+            <previewTemplate name="product/widget/compared/list.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/compared/list.phtml</previewTemplate>
+            <previewTemplate name="product/widget/compared/sidebar.phtml" xsi:type="string">MageOS_PageBuilderWidget::widget-preview/product/widget/compared/sidebar.phtml</previewTemplate>
+        </previewTemplates>
     </widget>
     <!-- Magento_CatalogWidget widgets -->
     <widget id="products_list">
