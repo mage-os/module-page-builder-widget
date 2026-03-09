@@ -7,6 +7,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "magento/module-widget": "*",
         "magento/module-page-builder": "^2.0"
     },
     "authors": [
