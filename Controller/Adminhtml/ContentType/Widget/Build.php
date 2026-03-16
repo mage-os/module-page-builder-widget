@@ -189,7 +189,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
                             if (is_array($repeatableItemData)) {
                                 foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
                                     $repeatableItemDataValue = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $repeatableItemDataValue);
-                                    $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
+                                    $repeatableItemData[$repeatableItemDataKey] = $repeatableItemDataValue;
                                 }
                             }
                             $value[$repeatableItemKey] = $repeatableItemData;
