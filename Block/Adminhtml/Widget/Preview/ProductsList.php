@@ -66,9 +66,9 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
         return [];
     }
 
-    public function getCacheKey(): array
+    public function getCacheKey(): string
     {
-        return [];
+        return '';
     }
 
     /**
