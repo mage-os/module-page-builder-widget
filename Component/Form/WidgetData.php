@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 class WidgetData extends \Magento\Ui\Component\Form\Field
 {
-    const HTML_ID_PLACEHOLDER = 'HTML_ID_PLACEHOLDER';
+    const string HTML_ID_PLACEHOLDER = 'HTML_ID_PLACEHOLDER';
 
     public function __construct(
         ContextInterface $context,

@@ -20,7 +20,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
 {
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
-    const SCRIPT_REPLACE_REGEX = '#<script\b[^>]*>.*?</script>#is';
+    const string SCRIPT_REPLACE_REGEX = '#<script\b[^>]*>.*?</script>#is';
 
     /**
      * @param Context $context
@@ -180,24 +180,21 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
                     }
                     break;
                 case 'text':
-                    $value = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $value);
-                    $params[$key] = $this->escaper->escapeHtml($value);
+                    $params[$key] = $this->sanitizeStringValue($value);
                     break;
                 default:
                     if (is_array($value)) {
                         foreach ($value as $repeatableItemKey => $repeatableItemData) {
                             if (is_array($repeatableItemData)) {
                                 foreach ($repeatableItemData as $repeatableItemDataKey => $repeatableItemDataValue) {
-                                    $repeatableItemDataValue = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $repeatableItemDataValue);
-                                    $repeatableItemData[$repeatableItemDataKey] = $this->escaper->escapeHtml($repeatableItemDataValue);
+                                    $repeatableItemData[$repeatableItemDataKey] = $this->sanitizeStringValue($repeatableItemDataValue);
                                 }
                             }
                             $value[$repeatableItemKey] = $repeatableItemData;
                         }
                         $params[$key] = $value;
                     } else {
-                        $value = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $value);
-                        $params[$key] = $this->escaper->escapeHtml($value);
+                        $params[$key] = $this->sanitizeStringValue($value);
                     }
                     break;
             }
@@ -206,11 +203,12 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     }
 
     /**
-     * @param string $type
+     * @param mixed $type
      * @return bool
      */
-    public function isTypeValid(string $type) {
-        if (!$type) {
+    public function isTypeValid($type): bool
+    {
+        if (!is_string($type) || $type === '') {
             return false;
         }
 
@@ -219,7 +217,22 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             $classToValidate = $this->objectManagerConfig->getInstanceType($type);
         }
 
-        return class_exists($classToValidate)
+        return is_string($classToValidate)
+            && class_exists($classToValidate)
             && is_subclass_of($classToValidate, \Magento\Widget\Block\BlockInterface::class);
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    protected function sanitizeStringValue($value): string
+    {
+        if (!is_string($value)) {
+            return '';
+        }
+        $stripped = preg_replace(self::SCRIPT_REPLACE_REGEX, '', $value);
+
+        return $this->escaper->escapeHtml($stripped ?? '');
     }
 }
