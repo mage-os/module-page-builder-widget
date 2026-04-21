@@ -3,9 +3,16 @@ declare(strict_types=1);
 
 namespace MageOS\PageBuilderWidget\Block\Adminhtml\Widget\Preview;
 
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implements BlockInterface, IdentityInterface
 {
@@ -16,15 +23,14 @@ class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implemen
     protected $reviewRenderer;
 
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        Context $context,
+        CollectionFactory $productCollectionFactory,
+        Visibility $catalogProductVisibility,
         HttpContext $httpContext,
         ReviewRenderer $reviewRenderer,
         array $data = [],
-        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
-    )
-    {
+        ?Json $serializer = null
+    ) {
         parent::__construct(
             $context,
             $productCollectionFactory,
@@ -36,12 +42,18 @@ class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implemen
         $this->reviewRenderer = $reviewRenderer;
     }
 
-    public function getCacheKeyInfo()
+    /**
+     * @return array
+     */
+    public function getCacheKeyInfo(): array
     {
         return [];
     }
 
-    public function getCacheKey()
+    /**
+     * @return string
+     */
+    public function getCacheKey(): string
     {
         return '';
     }
@@ -66,8 +78,6 @@ class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implemen
     }
 
     /**
-     * Render pagination HTML
-     *
      * @return string
      * @throws LocalizedException
      */
@@ -90,7 +100,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implemen
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());
             }
-            if ($this->_pager instanceof \Magento\Framework\View\Element\AbstractBlock) {
+            if ($this->_pager instanceof AbstractBlock) {
                 return $this->_pager->toHtml();
             }
         }
@@ -98,15 +108,13 @@ class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implemen
     }
 
     /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
+     * @param Product $product
+     * @param string|bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
      */
     public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $templateType = false,
         $displayIfNoReviews = false
     ) {
