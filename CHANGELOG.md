@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Harden `Build::sanitizeWidgetParams` so `preg_replace`/`escapeHtml` never receive non-string values (centralized in `sanitizeStringValue`)
 - Loosen `Build::isTypeValid` signature to accept mixed input from the request and validate type safely
 - Add missing `getCacheKey(): string` / `getCacheKeyInfo(): array` return types on `Block\Adminhtml\Widget\Preview\NewWidget` to match parent contracts
-- Use typed class constants where safe (`HTML_ID_PLACEHOLDER`, `SCRIPT_REPLACE_REGEX`) and consolidate `use` imports
+- Consolidate `use` imports across `Block\Adminhtml\Widget\Preview\*` and related files
 
 # 1.4.1
 ### Fixed

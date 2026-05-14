@@ -9,10 +9,10 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Widget\Block\BlockInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 class NewWidget extends \Magento\Catalog\Block\Product\Widget\NewWidget implements BlockInterface, IdentityInterface
 {

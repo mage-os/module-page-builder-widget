@@ -12,6 +12,7 @@ use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -19,7 +20,6 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
-use Magento\Framework\Exception\LocalizedException;
 
 class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList implements BlockInterface, IdentityInterface
 {

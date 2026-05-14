@@ -20,7 +20,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
 {
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
-    const string SCRIPT_REPLACE_REGEX = '#<script\b[^>]*>.*?</script>#is';
+    const SCRIPT_REPLACE_REGEX = '#<script\b[^>]*>.*?</script>#is';
 
     /**
      * @param Context $context
