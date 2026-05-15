@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace MageOS\PageBuilderWidget\Model\Config;
 
+use LogicException;
+
 class Converter extends \Magento\Widget\Model\Config\Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @inheritdoc
+     *
+     * @throws LogicException
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -106,7 +110,7 @@ class Converter extends \Magento\Widget\Model\Config\Converter implements \Magen
                     case "#text":
                         break;
                     default:
-                        throw new \LogicException(
+                        throw new LogicException(
                             sprintf(
                                 "Unsupported child xml node '%s' found in the 'widget' node",
                                 $widgetSubNode->nodeName
