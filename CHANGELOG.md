@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Declare PHP 8.5 compatibility in composer.json (now explicitly supports PHP 8.1 through 8.5)
 ### Fixed
+- Fix previewTemplates xml node merge adding reference to xml config reader
 - Guard `preg_replace_callback` in `WidgetContentSettingsCleanup` against null/empty content to avoid PHP 8.5 deprecation on null subjects
 - Harden `Build::sanitizeWidgetParams` so `preg_replace`/`escapeHtml` never receive non-string values (centralized in `sanitizeStringValue`)
 - Loosen `Build::isTypeValid` signature to accept mixed input from the request and validate type safely
