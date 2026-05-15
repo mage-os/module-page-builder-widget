@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+# 1.5.0 - 2026-05-14
+### Added
+- Declare PHP 8.5 compatibility in composer.json (now explicitly supports PHP 8.1 through 8.5)
+### Fixed
+- Guard `preg_replace_callback` in `WidgetContentSettingsCleanup` against null/empty content to avoid PHP 8.5 deprecation on null subjects
+- Harden `Build::sanitizeWidgetParams` so `preg_replace`/`escapeHtml` never receive non-string values (centralized in `sanitizeStringValue`)
+- Loosen `Build::isTypeValid` signature to accept mixed input from the request and validate type safely
+- Add missing `getCacheKey(): string` / `getCacheKeyInfo(): array` return types on `Block\Adminhtml\Widget\Preview\NewWidget` to match parent contracts
+- Consolidate `use` imports across `Block\Adminhtml\Widget\Preview\*` and related files
+
 # 1.4.1
 ### Fixed
 - Fix getCacheKey() return type from array to string matching parent contract

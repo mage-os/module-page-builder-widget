@@ -5,14 +5,17 @@ namespace MageOS\PageBuilderWidget\Block\Adminhtml\Widget\Preview;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
 use Magento\Widget\Block\BlockInterface;
@@ -41,8 +44,7 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
         ?EncoderInterface $urlEncoder = null,
         ?CategoryRepositoryInterface $categoryRepository = null,
         ?OptionsData $optionsData = null
-    )
-    {
+    ) {
         parent::__construct(
             $context,
             $productCollectionFactory,
@@ -91,8 +93,6 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
     }
 
     /**
-     * Render pagination HTML
-     *
      * @return string
      * @throws LocalizedException
      */
@@ -115,7 +115,7 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
                     ->setTotalLimit($this->getProductsCount())
                     ->setCollection($this->getProductCollection());
             }
-            if ($this->pager instanceof \Magento\Framework\View\Element\AbstractBlock) {
+            if ($this->pager instanceof AbstractBlock) {
                 return $this->pager->toHtml();
             }
         }
@@ -123,15 +123,13 @@ class ProductsList extends \Magento\CatalogWidget\Block\Product\ProductsList imp
     }
 
     /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
+     * @param Product $product
+     * @param string|bool $templateType
      * @param bool $displayIfNoReviews
      * @return string
      */
     public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         $templateType = false,
         $displayIfNoReviews = false
     ) {
