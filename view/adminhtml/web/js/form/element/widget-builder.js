@@ -57,12 +57,27 @@ define([
         },
 
         updateValue: function () {
-            this.submitWidgetForm($('#widgetForm' + this.uid));
+            this.prepareForSave().fail(function () {});
+        },
+
+        prepareForSave: function () {
+            let $form = $('#widgetForm' + this.uid);
+
+            if (!this.saveIsAvailable() || !$form.length || this.widgetHtmlForm() === null) {
+                return $.Deferred().resolve().promise();
+            }
+
+            return this.submitWidgetForm($form);
         },
 
         submitWidgetForm: function ($form) {
-            let validationResult,
+            let deferred = $.Deferred(),
+                validationResult,
                 self = this;
+
+            if (!$form.length) {
+                return deferred.resolve().promise();
+            }
 
             $.data($form[0], 'validator', null);
 
@@ -78,59 +93,89 @@ define([
 
             validationResult = $form.valid();
 
-            if (validationResult) {
-
-                let formElements = [],
-                    i = 0;
-                Form.getElements($form[0]).each(function (e) {
-
-                    if (jQuery(e).closest('.skip-submit, .no-display').length === 0) {
-                        formElements[i] = e;
-                        i++;
-                    }
-                });
-
-                let params = this.serializeElements(formElements);
-                let widgetData = this.getWidgetData();
-                params["form_key"] = window.FORM_KEY;
-                params["widget_type"] = widgetData.type;
-                this.widgetData(params);
-
-                let requestData = {
-                    method: 'POST',
-                    data: params
-                }
-                if (!_.isEmpty(params["widget_type"])) {
-                    $('body').trigger('processStart');
-                    $.ajax(objectUtils.nested(Config.getConfig(), this.saveFormUrlConfigPath), requestData)
-                        .always(function () {
-                            $('body').trigger('processStop');
-                            self.errorMessage(null);
-                        }.bind(this))
-                        .done(function (response) {
-
-                            let regex = /(\w+)="([^"]*)"/g,
-                                match,
-                                result = {widget_type: widgetData.type, values: {}};
-
-                            while ((match = regex.exec(response.widgetData)) !== null) {
-                                result.values[match[1]] = match[2];
-                            }
-
-                            registry.get(this.parentName + '.content_settings').value(JSON.stringify({
-                                "data": JSON.stringify(result),
-                                "preview": response.widgetPreview,
-                                "code": self.selectedWidgetCode()
-                            }));
-
-                            self.value(response.widgetDeclaration);
-
-                        }.bind(this))
-                        .fail(function () {
-                            self.errorMessage(this.messages.UNKOWN_ERROR);
-                        }.bind(this));
-                }
+            if (!validationResult) {
+                return deferred.reject().promise();
             }
+
+            let formElements = [],
+                i = 0;
+            Form.getElements($form[0]).each(function (e) {
+
+                if (jQuery(e).closest('.skip-submit, .no-display').length === 0) {
+                    formElements[i] = e;
+                    i++;
+                }
+            });
+
+            let params = this.serializeElements(formElements);
+            let widgetData = this.getWidgetData();
+            params["form_key"] = window.FORM_KEY;
+            params["widget_type"] = widgetData.type;
+            this.widgetData(params);
+
+            let requestData = {
+                method: 'POST',
+                data: params
+            };
+            if (_.isEmpty(params["widget_type"])) {
+                return deferred.resolve().promise();
+            }
+            $('body').trigger('processStart');
+            $.ajax(objectUtils.nested(Config.getConfig(), this.saveFormUrlConfigPath), requestData)
+                .always(function () {
+                    $('body').trigger('processStop');
+                }.bind(this))
+                .done(function (response) {
+                    let contentSettings,
+                        regex,
+                        match,
+                        result;
+
+                    if (
+                        !response ||
+                        _.isUndefined(response.widgetDeclaration) ||
+                        response.widgetDeclaration === null ||
+                        _.isUndefined(response.widgetData) ||
+                        response.widgetData === null
+                    ) {
+                        self.errorMessage(this.messages.UNKOWN_ERROR);
+                        deferred.reject();
+
+                        return;
+                    }
+
+                    self.errorMessage(null);
+                    regex = /(\w+)="([^"]*)"/g;
+                    result = {widget_type: widgetData.type, values: {}};
+
+                    while ((match = regex.exec(response.widgetData)) !== null) {
+                        result.values[match[1]] = match[2];
+                    }
+
+                    contentSettings = registry.get(this.parentName + '.content_settings');
+                    if (!contentSettings) {
+                        self.errorMessage(this.messages.UNKOWN_ERROR);
+                        deferred.reject();
+
+                        return;
+                    }
+
+                    contentSettings.value(JSON.stringify({
+                        "data": JSON.stringify(result),
+                        "preview": response.widgetPreview,
+                        "code": self.selectedWidgetCode()
+                    }));
+
+                    self.value(response.widgetDeclaration);
+                    deferred.resolve(response);
+
+                }.bind(this))
+                .fail(function () {
+                    self.errorMessage(this.messages.UNKOWN_ERROR);
+                    deferred.reject();
+                }.bind(this));
+
+            return deferred.promise();
         },
 
         getWidgetData: function () {
