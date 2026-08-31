@@ -195,36 +195,37 @@ define([
         },
 
         serializeElements: function (elements) {
-            let options = {hash: true, submit: true},
-                key,
-                value,
-                submitted = false,
-                submit = options.submit,
-                accumulator,
-                initial;
+            let result = {};
 
-            if (options.hash) {
-                initial = {};
-                accumulator = function (result, key, value) {
-                    if (key in result) {
-                        if (!Object.isArray(result[key])) result[key] = [result[key]];
-                        result[key] = result[key].concat(value);
-                    } else result[key] = value;
-                    return result;
-                };
+            for (let i = 0; i < elements.length; i++) {
+                let element = elements[i],
+                    value;
+
+                if (element.disabled || !element.name || element.type === 'file'
+                    || element.type === 'submit' || element.type === 'button'
+                ) {
+                    continue;
+                }
+                if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
+                    continue;
+                }
+
+                value = $(element).val();
+
+                if (value === null || value === undefined) {
+                    continue;
+                }
+
+                if (/\[\]$/.test(element.name)) {
+                    let listKey = element.name.slice(0, -2);
+
+                    result[listKey] = (result[listKey] || []).concat(value);
+                } else {
+                    result[element.name] = value;
+                }
             }
 
-            return elements.inject(initial, function (result, element) {
-                if (!element.disabled && element.name) {
-                    key = element.name;
-                    value = $('#' + $(element).attr('id')).val();
-                    if (value != null && element.type != 'file' && (element.type != 'submit' || (!submitted &&
-                        submit !== false && (!submit || key == submit) && (submitted = true)))) {
-                        result = accumulator(result, key, value);
-                    }
-                }
-                return result;
-            });
+            return result;
         },
 
         renderWidgetBuilder: function () {
