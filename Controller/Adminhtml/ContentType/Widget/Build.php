@@ -148,7 +148,7 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
      */
     public function sanitizeWidgetParams(array $params, DataObject $widgetConfig): array
     {
-        $paramsConfig = $widgetConfig->getData('parameters');
+        $paramsConfig = $widgetConfig->getData('parameters') ?? [];
         $paramKeys = array_keys($paramsConfig);
         foreach ($params as $key => $value) {
             if ($key === "pagebuilder_widget_directive") {
@@ -161,22 +161,15 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             if (!isset($paramsConfig[$key]) && $key === 'conditions') {
                 $paramsConfigKey = 'condition';
             }
+            if (!isset($paramsConfig[$paramsConfigKey])) {
+                unset($params[$key]);
+                continue;
+            }
             switch ($paramsConfig[$paramsConfigKey]->getType()) {
                 case 'select':
-                    $valueFound = false;
-                    foreach ($paramsConfig[$paramsConfigKey]['values'] as $valueKey => $valueData) {
-                        if ($value === $valueData['value']) {
-                            $valueFound = true;
-                            break;
-                        }
-                    }
-                    if (!$valueFound) {
-                        if (isset($paramsConfig[$paramsConfigKey]['source_model'])) {
-                            $paramsConfig[$paramsConfigKey]['values'] = $this->objectManager->get(
-                                $paramsConfig[$paramsConfigKey]['source_model']
-                            )->toOptionArray();
-                        }
-                        $params[$key] = $paramsConfig[$paramsConfigKey]['values'][0]['value'];
+                    $options = $this->getSelectOptions($paramsConfig[$paramsConfigKey]);
+                    if ($options !== [] && !$this->isAllowedSelectValue($value, $options)) {
+                        $params[$key] = $options[0]['value'];
                     }
                     break;
                 case 'text':
@@ -200,6 +193,65 @@ class Build extends \Magento\Backend\App\Action implements HttpPostActionInterfa
             }
         }
         return $params;
+    }
+
+    /**
+     * Collect the option values a select parameter allows
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function getSelectOptions(DataObject $paramConfig): array
+    {
+        $values = $paramConfig->getData('values');
+        if (!is_array($values) || $values === []) {
+            $sourceModel = $paramConfig->getData('source_model');
+            $values = $sourceModel ? $this->objectManager->get($sourceModel)->toOptionArray() : [];
+        }
+
+        return $this->flattenSelectOptions(is_array($values) ? $values : []);
+    }
+
+    /**
+     * Flatten option groups, so that a grouped source model cannot yield an array as fallback value
+     *
+     * @param array<mixed> $values
+     * @return list<array<string, mixed>>
+     */
+    private function flattenSelectOptions(array $values): array
+    {
+        $options = [];
+        foreach ($values as $option) {
+            if (!is_array($option) || !array_key_exists('value', $option)) {
+                continue;
+            }
+            if (is_array($option['value'])) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $options = array_merge($options, $this->flattenSelectOptions($option['value']));
+                continue;
+            }
+            $options[] = $option;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Whether the posted value is one of the allowed option values
+     *
+     * @param list<array<string, mixed>> $options
+     */
+    private function isAllowedSelectValue(mixed $value, array $options): bool
+    {
+        if (!is_scalar($value)) {
+            return false;
+        }
+        foreach ($options as $option) {
+            if ((string)$option['value'] === (string)$value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
